@@ -1,0 +1,3 @@
+1>warnings in directory g:\batman\batman
+1>g:\batman\batman\batman.c(80) : warning C4242: '=' : conversion from 'ULONG_PTR' to 'int', possible loss of data
+1>g:\batman\batman\batman.c(229) : warning C4022: 'PsLookupProcessByProcessId' : pointer mismatch for actual parameter 1

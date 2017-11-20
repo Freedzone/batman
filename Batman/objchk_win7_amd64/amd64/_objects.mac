@@ -1,0 +1,16 @@
+
+
+AMD64_OBJECTS=\
+ $(OBJ_PATH)\$O\batman.obj \
+
+
+
+
+
+# lowercased
+BASEDIR=g:\ddk
+OBJECT_ROOT=g:\ddk
+MAKEDIR_LOWERCASE=g:\batman\batman
+OBJ_PATH=g:\batman\batman
+CONCURRENT_MIDL=0
+CONCURRENT_MANIFEST_BUILD=0

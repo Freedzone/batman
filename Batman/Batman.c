@@ -29,6 +29,7 @@ NTSTATUS CreateDriverDevice(IN PDRIVER_OBJECT pDriverObject);
 NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
 VOID UnloadRoutine(IN PDRIVER_OBJECT DriverObject);
 
+// https://vxlab.info/wasm/article.php-article=lockfileswork.htm
 PHANDLE_TABLE_ENTRY ExLookupHandleTableEntry( IN PHANDLE_TABLE HandleTable, IN EXHANDLE Handle )
 {
 	ULONG i, j, k;
@@ -139,7 +140,7 @@ NTSTATUS Driver_IoControl(IN PDEVICE_OBJECT pDeviceObj, IN PIRP pIrp)
 
 	//DbgPrint("Driver control called");
 	pStack = IoGetCurrentIrpStackLocation(pIrp);
-	pIrp->AssociatedIrp.
+
 	switch(pStack->Parameters.DeviceIoControl.IoControlCode)
 	{
 	case IOCTL_PASS_HANDLE:
@@ -157,11 +158,14 @@ NTSTATUS Driver_IoControl(IN PDEVICE_OBJECT pDeviceObj, IN PIRP pIrp)
 		inBUF  = (PHANDLE_CONTAINER)pIrp->AssociatedIrp.SystemBuffer;
 		hProcess = (HANDLE)inBUF->Handle_Value;
 
-		if( SetHandleAccess(hProcess, AC_GENERIC_ALL | AC_STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL) != STATUS_SUCCESS )
+		if( SetHandleAccess(hProcess, AC_GENERIC_ALL | AC_STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL) != STATUS_SUCCESS ) {
+			nts = STATUS_DATA_ERROR
 			//DbgPrint("Set handle access - UnSuccessFul");
-
-		nts = STATUS_SUCCESS;
-		pIrp->IoStatus.Information = sizeof(HANDLE_CONTAINER);
+		}
+		else {
+			nts = STATUS_SUCCESS;
+			pIrp->IoStatus.Information = sizeof(HANDLE_CONTAINER);
+		}		
 
 		break;
 
